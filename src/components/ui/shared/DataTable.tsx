@@ -32,7 +32,7 @@ const DataTable: React.FC = () => {
 
   const columnHelper = createColumnHelper<Item>();
 
-  const columns: ColumnDef<Item>[] = [
+  const columns: ColumnDef<Item,"">[] = [
     columnHelper.accessor("description", {
       cell: (info) => info.getValue(),
       header: () => <span className="flex items-center">Description</span>,
