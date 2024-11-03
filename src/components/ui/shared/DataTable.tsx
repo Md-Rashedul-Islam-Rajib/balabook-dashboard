@@ -8,8 +8,9 @@ import {
   useReactTable,
   ColumnDef,
   SortingState,
-//   Table,
+  //   Table,
 } from "@tanstack/react-table";
+import { ArrowLeftIcon, ArrowRightIcon, PinLeftIcon, PinRightIcon } from "@radix-ui/react-icons";
 
 type Item = {
   description: string;
@@ -32,7 +33,7 @@ const DataTable: React.FC = () => {
 
   const columnHelper = createColumnHelper<Item>();
 
-  const columns: ColumnDef<Item,"">[] = [
+  const columns: ColumnDef<Item, "">[] = [
     columnHelper.accessor("description", {
       cell: (info) => info.getValue(),
       header: () => <span className="flex items-center">Description</span>,
@@ -47,7 +48,7 @@ const DataTable: React.FC = () => {
     }),
     {
       id: "actions",
-      header: () => <span className="flex items-center">Actions</span>,
+      header: () => <span className="flex items-center"></span>,
       cell: () => (
         <button className="bg-black text-white rounded px-2 py-1">
           Actions
@@ -61,6 +62,11 @@ const DataTable: React.FC = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: { sorting, globalFilter },
+    initialState: {
+      pagination: {
+        pageSize: 5,
+      },
+    },
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onGlobalFilterChange: setGlobalFilter,
@@ -68,7 +74,7 @@ const DataTable: React.FC = () => {
   });
 
   return (
-    <div className="p-4 w-full">
+    <div className="p-4 w-full bg-gray-100 rounded-xl">
       <div className="flex justify-between mb-4">
         <h2 className="text-2xl font-bold">Items</h2>
         <button className="bg-yellow-400 text-white rounded px-4 py-2">
@@ -82,13 +88,13 @@ const DataTable: React.FC = () => {
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
           placeholder="Search..."
-          className="search-input mb-4 p-2 border border-white outline-none focus:outline-white bg-[#ffffff8d] transition-all duration-700 w-full mx-auto block"
+          className="search-input mb-4 p-2 border border-white outline-none focus:outline-white rounded-lg bg-white transition-all duration-700 w-full mx-auto block"
         />
       </div>
 
       <div className="rounded-lg shadow-md overflow-hidden border w-full">
-        <table className="w-full text-left border-collapse">
-          <thead className="bg-gray-200">
+        <table className="w-full text-left border-collapse bg-white">
+          <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -131,6 +137,57 @@ const DataTable: React.FC = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-center pt-5">
+        {/* <div className="flex items-center m-4">
+          <span className="font-medium mr-2">Items per page</span>
+          <select
+            className="border border-gray-300 rounded-md shadow-md"
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => {
+              table.setPageSize(Number(e.target.value));
+            }}
+          >
+            {[2,4, 8].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
+            ))}
+          </select>
+              </div> */}
+              
+        <div className="pr-4 flex items-center gap-3">
+          <button
+            className="cursor-pointer"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <PinLeftIcon />
+          </button>
+          <button
+            className="cursor-pointer"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <ArrowLeftIcon />
+          </button>
+          <span>{table.getState().pagination.pageIndex + 1}</span>
+
+          <button
+            className="cursor-pointer"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <ArrowRightIcon />
+          </button>
+          <button
+            className="cursor-pointer"
+            onClick={() => table.setPageIndex(table.getPageCount() -1)}
+            disabled={!table.getCanNextPage()}
+          >
+            <PinRightIcon />
+          </button>
+        </div>
       </div>
     </div>
   );

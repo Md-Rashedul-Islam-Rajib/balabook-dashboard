@@ -24,27 +24,37 @@ import {
 const AppSidebar = () => {
   const items = [
     {
-      title: "Home",
+      title: "Dashboard",
       url: "#",
       // icon: Home,
     },
     {
-      title: "Inbox",
+      title: "Items",
       url: "#",
       // icon: Inbox,
     },
     {
-      title: "Calendar",
+      title: "Partners",
       url: "#",
       // icon: Calendar,
     },
     {
-      title: "Search",
+      title: "Sales",
       url: "#",
       // icon: Search,
     },
     {
-      title: "Settings",
+      title: "Purchase",
+      url: "#",
+      // icon: Settings,
+    },
+    {
+      title: "Reports",
+      url: "#",
+      // icon: Settings,
+    },
+    {
+      title: "Accountant",
       url: "#",
       // icon: Settings,
     },
@@ -73,11 +83,16 @@ const AppSidebar = () => {
         <SidebarContent>
           <SidebarMenu>
             {items.map((item) => (
-              <SidebarMenuItem key={item.title}>
+              <SidebarMenuItem key={item.title} className="py-3 font-semibold">
                 <SidebarMenuButton asChild>
                   <a href={item.url}>
-                    
-                    <span>{item.title}</span>
+                    <span
+                      className={`${
+                        item.title === "Items" ? "text-indigo-600" : ""
+                      }`}
+                    >
+                      {item.title}
+                    </span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -104,7 +119,10 @@ const AppSidebar = () => {
                   </DropdownMenuTrigger>
                 </SidebarGroupLabel>
 
-                <DropdownMenuContent side="top" className="w-72 md:w-64 mr-12 lg:w-[250px] lg:mr-11">
+                <DropdownMenuContent
+                  side="top"
+                  className="w-72 md:w-64 mr-12 lg:w-[250px] lg:mr-11"
+                >
                   <DropdownMenuItem>Company Settings</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Profile Settings</DropdownMenuItem>
