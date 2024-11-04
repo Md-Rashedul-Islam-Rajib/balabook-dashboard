@@ -10,7 +10,10 @@ import {
   SortingState,
   //   Table,
 } from "@tanstack/react-table";
-import { ArrowLeftIcon, ArrowRightIcon, PinLeftIcon, PinRightIcon } from "@radix-ui/react-icons";
+import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, PinLeftIcon, PinRightIcon } from "@radix-ui/react-icons";
+import { Button } from "../button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../dropdown-menu";
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 
 type Item = {
   description: string;
@@ -50,9 +53,19 @@ const DataTable: React.FC = () => {
       id: "actions",
       header: () => <span className="flex items-center"></span>,
       cell: () => (
-        <button className="bg-black text-white rounded px-2 py-1">
-          Actions
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            
+        <Button variant={"outline"} className=" text-black rounded-3xl px-4 py-2 hover:text-white hover:bg-black">
+          Actions <ChevronDownIcon />
+        </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuSeparator></DropdownMenuSeparator>
+            <DropdownMenuItem>Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ),
     },
   ];
