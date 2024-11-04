@@ -16,7 +16,7 @@ createRoot(document.getElementById("root")!).render(
         {/* Main Content */}
         {/* <div className="flex-1 flex flex-col"> */}
           <main className="w-full p-4">
-            <SidebarTrigger />
+            <SidebarTrigger className="-ml-2" />
             <DataTable />
           </main>
         </div>

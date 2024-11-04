@@ -10,10 +10,19 @@ import {
   SortingState,
   //   Table,
 } from "@tanstack/react-table";
-import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, PinLeftIcon, PinRightIcon } from "@radix-ui/react-icons";
+import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, HomeIcon, PinLeftIcon, PinRightIcon } from "@radix-ui/react-icons";
 import { Button } from "../button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../dropdown-menu";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+
 
 type Item = {
   description: string;
@@ -87,72 +96,88 @@ const DataTable: React.FC = () => {
   });
 
   return (
-    <div className="p-4 w-full bg-gray-100 rounded-xl">
+    <div>
+      <div className="py-3">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/"><HomeIcon /></BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage className="text-indigo-500">Items</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
       <div className="flex justify-between mb-4">
-        <h2 className="text-2xl font-bold">Items</h2>
-        <button className="bg-yellow-400 text-white rounded px-4 py-2">
+        <h2 className="text-5xl font-bold">Items</h2>
+        <Button className="bg-[#ffed37] text-black rounded-2xl px-4 py-2">
           Add New Item
-        </button>
+        </Button>
       </div>
+      <div className="p-4 w-full bg-gray-100 rounded-xl">
+        <div className="mb-4 relative">
+          <input
+            type="text"
+            value={globalFilter}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            placeholder="Search..."
+            className="search-input mb-4 p-2 border border-white outline-none focus:outline-white rounded-lg bg-white transition-all duration-700 w-full mx-auto block"
+          />
+        </div>
 
-      <div className="mb-4 relative">
-        <input
-          type="text"
-          value={globalFilter}
-          onChange={(e) => setGlobalFilter(e.target.value)}
-          placeholder="Search..."
-          className="search-input mb-4 p-2 border border-white outline-none focus:outline-white rounded-lg bg-white transition-all duration-700 w-full mx-auto block"
-        />
-      </div>
-
-      <div className="rounded-lg shadow-md overflow-hidden border w-full">
-        <table className="w-full text-left border-collapse bg-white">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="p-4 font-semibold text-gray-700 border-b"
-                  >
-                    <span
-                      {...{
-                        className: header.column.getCanSort()
-                          ? "cursor-pointer select-none"
-                          : "",
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}
+        <div className="rounded-lg shadow-md overflow-auto border w-full">
+          <table className="w-full text-left border-collapse bg-white ">
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      className="p-4 font-semibold text-gray-700 border-b"
                     >
+                      <span
+                        {...{
+                          className: header.column.getCanSort()
+                            ? "cursor-pointer select-none"
+                            : "",
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                      </span>
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="p-4 border-b text-gray-600">
                       {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
+                        cell.column.columnDef.cell,
+                        cell.getContext()
                       )}
-                    </span>
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="p-4 border-b text-gray-600">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-                {/* <td className="p-4 text-right">
+                    </td>
+                  ))}
+                  {/* <td className="p-4 text-right">
                   <button className="bg-black text-white rounded px-2 py-1">
                     Actions
                   </button>
                 </td> */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="flex justify-center pt-5">
-        {/* <div className="flex items-center m-4">
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex justify-center pt-5">
+          {/* <div className="flex items-center m-4">
           <span className="font-medium mr-2">Items per page</span>
           <select
             className="border border-gray-300 rounded-md shadow-md"
@@ -161,45 +186,46 @@ const DataTable: React.FC = () => {
               table.setPageSize(Number(e.target.value));
             }}
           >
-            {[2,4, 8].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                {pageSize}
-              </option>
+          {[2,4, 8].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+            {pageSize}
+            </option>
             ))}
           </select>
               </div> */}
-              
-        <div className="pr-4 flex items-center gap-3">
-          <button
-            className="cursor-pointer"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <PinLeftIcon />
-          </button>
-          <button
-            className="cursor-pointer"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <ArrowLeftIcon />
-          </button>
-          <span>{table.getState().pagination.pageIndex + 1}</span>
 
-          <button
-            className="cursor-pointer"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <ArrowRightIcon />
-          </button>
-          <button
-            className="cursor-pointer"
-            onClick={() => table.setPageIndex(table.getPageCount() -1)}
-            disabled={!table.getCanNextPage()}
-          >
-            <PinRightIcon />
-          </button>
+          <div className="pr-4 flex items-center gap-3">
+            <button
+              className="cursor-pointer"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <PinLeftIcon />
+            </button>
+            <button
+              className="cursor-pointer"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ArrowLeftIcon />
+            </button>
+            <span>{table.getState().pagination.pageIndex + 1}</span>
+
+            <button
+              className="cursor-pointer"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ArrowRightIcon />
+            </button>
+            <button
+              className="cursor-pointer"
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+            >
+              <PinRightIcon />
+            </button>
+          </div>
         </div>
       </div>
     </div>
