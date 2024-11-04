@@ -23,6 +23,30 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  // SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  // DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "../input";
+import { Label } from "../label";
+
+
 
 type Item = {
   description: string;
@@ -101,7 +125,9 @@ const DataTable: React.FC = () => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/"><HomeIcon /></BreadcrumbLink>
+              <BreadcrumbLink href="/">
+                <HomeIcon />
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -112,9 +138,105 @@ const DataTable: React.FC = () => {
       </div>
       <div className="flex justify-between mb-4">
         <h2 className="text-5xl font-bold">Items</h2>
-        <Button className="bg-[#ffed37] text-black rounded-2xl px-4 py-2">
-          Add New Item
-        </Button>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="bg-[#ffed37] text-black rounded-2xl px-4 py-2 hover:bg-yellow-300">
+              Add New Item
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>General Information</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="description" className="text-right">
+                  Description <span className="text-indigo-500">*</span>
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Description"
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="account" className="text-right">
+                  Account
+                </Label>
+                <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="interest income">
+                        Interest Income
+                      </SelectItem>
+                      <SelectItem value="other revenue">
+                        Other Revenue
+                      </SelectItem>
+                      <SelectItem value="realised gain on foreign exchange">
+                        Realised Gain On Foreign Exchange
+                      </SelectItem>
+                      <SelectItem value="sales">Sales</SelectItem>
+                      {/* <SelectItem value="others">Others</SelectItem> */}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="price" className="text-right">
+                Price<span className="text-indigo-500">*</span>
+              </Label>
+              <Input
+                id="price"
+                type="number"
+                placeholder="0.00"
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="discount" className="text-right">
+                Discount
+              </Label>
+              <Input
+                id="discount"
+                type="number"
+                placeholder="0.00"
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="discount" className="text-right">
+                Type of Item
+              </Label>
+              <RadioGroup defaultValue="service" className="flex gap-6">
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="service" id="r1" />
+                  <Label htmlFor="r1">Service</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="good" id="r2" />
+                  <Label htmlFor="r2">Good</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+
+              <Button
+                type="submit"
+                className="bg-[#ffed37] text-black rounded-2xl px-4 py-2 hover:bg-yellow-300"
+                >
+                Save
+              </Button>
+                </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="p-4 w-full bg-gray-100 rounded-xl">
         <div className="mb-4 relative">
